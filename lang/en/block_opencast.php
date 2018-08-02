@@ -134,6 +134,7 @@ $string['submit'] = 'Save changes';
 $string['ocstatefailed'] = 'Failed';
 $string['ocstateprocessing'] = 'Processing';
 $string['ocstatesucceeded'] = 'Succeeded';
+$string['ocstatecapturing'] = 'Capturing';
 $string['uploadfilelimit'] = 'Video size limit';
 $string['uploadfilelimitdesc'] = 'Limit the file size of uploaded videos.';
 $string['uploadingeventfailed'] = 'Creating of event failed';

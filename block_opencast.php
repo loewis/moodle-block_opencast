@@ -54,20 +54,21 @@ class block_opencast extends block_base {
 
         $coursecontext = context_course::instance($COURSE->id);
 
-        if (!has_capability('block/opencast:viewunpublishedvideos', $coursecontext)) {
-            return $this->content;
-        }
-
         $renderer = $PAGE->get_renderer('block_opencast');
         $apibridge = \block_opencast\local\apibridge::get_instance();
+
+        $canedit = has_capability('block/opencast:viewunpublishedvideos', $coursecontext);
+
         try {
-            $videos = $apibridge->get_block_videos($COURSE->id);
+            $videos = $apibridge->get_block_videos($COURSE->id, $canedit);
         } catch (\moodle_exception $e) {
             $videos = new \stdClass();
             $videos->error = $e->getmessage();
         }
 
-        $this->content->text = $renderer->render_block_content($COURSE->id, $videos);
+        if (isset($videos)) {
+            $this->content->text = $renderer->render_block_content($COURSE->id, $videos, $canedit);
+        }
         return $this->content;
     }
 

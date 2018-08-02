@@ -64,6 +64,8 @@ class block_opencast_renderer extends plugin_renderer_base {
                 return $this->output->pix_icon('failed', get_string('ocstatefailed', 'block_opencast'), 'block_opencast');
             case 'PLANNED' :
                 return $this->output->pix_icon('c/event', get_string('planned', 'block_opencast'));
+            case 'CAPTURING' :
+                return $this->output->pix_icon('capturing', get_string('ocstatecapturing', 'block_opencast'), 'block_opencast');
             default :
                 return $this->output->pix_icon('processing', get_string('ocstateprocessing', 'block_opencast'), 'block_opencast');
         }
@@ -74,7 +76,7 @@ class block_opencast_renderer extends plugin_renderer_base {
      *
      * @param object $videodata data as a result from api query against opencast.
      */
-    public function render_block_content($courseid, $videodata) {
+    public function render_block_content($courseid, $videodata, $canedit) {
 
         $html = '';
 
@@ -101,19 +103,37 @@ class block_opencast_renderer extends plugin_renderer_base {
             $listitems = '';
             foreach ($videodata->videos as $video) {
                 $icon = $this->render_processing_state_icon($video->processing_state);
-                $listitems .= html_writer::tag('li', $icon . $video->title, array('class' => 'opencast-vlist-item'));
+                // Get baseurl either from engageurl setting or from opencast tool.
+                $baseurl = get_config('filter_opencast', 'engageurl');
+                if (empty($baseurl)) {
+                    $baseurl = get_config('tool_opencast', 'apiurl');
+                }
+
+                if (strpos($baseurl, 'http') !== 0) {
+                    $baseurl = 'http://' . $baseurl;
+                }
+
+                // Create link to video.
+                $playerurl = get_config('filter_opencast', 'playerurl');
+
+                // Change url for loading the (Paella) Player.
+                $url = $baseurl . $playerurl .'?id=' . $video->identifier;
+                $link = html_writer::link($url, $icon . $video->title);
+                $listitems .= html_writer::tag('li', $link, array('class' => 'opencast-vlist-item'));
             }
 
             $html .= html_writer::tag('ul', $listitems, array('class' => 'opencast-vlist'));
         }
 
-        $moretext = get_string('gotooverview', 'block_opencast');
-        if ($videodata->more) {
-            $moretext = get_string('morevideos', 'block_opencast');
+        if ($canedit) {
+            $moretext = get_string('gotooverview', 'block_opencast');
+            if ($videodata->more) {
+                $moretext = get_string('morevideos', 'block_opencast');
+            }
+            $url = new moodle_url('/blocks/opencast/index.php', array('courseid' => $courseid));
+            $link = html_writer::link($url, $moretext);
+            $html .= html_writer::div($link, 'opencast-more-wrap');
         }
-        $url = new moodle_url('/blocks/opencast/index.php', array('courseid' => $courseid));
-        $link = html_writer::link($url, $moretext);
-        $html .= html_writer::div($link, 'opencast-more-wrap');
 
         return $html;
     }

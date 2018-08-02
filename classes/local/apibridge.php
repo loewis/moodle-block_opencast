@@ -74,7 +74,7 @@ class apibridge {
      *
      * @return \stdClass
      */
-    public function get_block_videos($courseid) {
+    public function get_block_videos($courseid, $edit = true) {
 
         $result = new \stdClass();
         $result->count = 0;
@@ -100,6 +100,12 @@ class apibridge {
         $url = '/api/events?' . $query;
 
         $withroles = array();
+        if (!$edit) {
+            $roles = $this->getroles(array('permanent' => 0));
+            foreach ($roles as $role) {
+                $withroles[] = $this->replace_placeholders($role->rolename, $courseid);
+            }
+        }
 
         $api = new api();
 
@@ -201,8 +207,12 @@ class apibridge {
         $api = new api();
         $plannedvideo = json_decode($api->oc_get($resource));
 
-        if ($api->get_http_code() === 200 && $plannedvideo->state === "") {
-            $video->processing_state = "PLANNED";
+        if ($api->get_http_code() === 200) {
+            if ($plannedvideo->state === "") {
+                $video->processing_state = "PLANNED";
+            } else if ($plannedvideo->state === "capturing") {
+                $video->processing_state = "CAPTURING";
+            }
         }
     }
 
