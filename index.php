@@ -43,7 +43,7 @@ $PAGE->navbar->add(get_string('overview', 'block_opencast'), $baseurl);
 $coursecontext = context_course::instance($courseid);
 require_capability('block/opencast:viewunpublishedvideos', $coursecontext);
 
-$table = new flexible_table('opencast-videos-table');
+$table = new block_opencast\local\flexible_table('opencast-videos-table');
 
 $download = optional_param('download', '', PARAM_ALPHA);
 if ($download) {
@@ -86,7 +86,8 @@ $table->define_columns($columns);
 $table->define_baseurl($baseurl);
 
 $table->no_sorting('action');
-$table->sortable(true, 'start_date', SORT_DESC);
+$table->no_sorting('published');
+$table->sortable(true);
 
 $table->pageable(true);
 $table->is_downloadable(false);
