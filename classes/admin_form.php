@@ -93,6 +93,17 @@ class admin_form extends moodleform {
         $mform->setDefault($name, 0);
         $mform->addElement('static', 'description' . $name, '', $description);
 
+        // Configurate, whether a videofile should be deleted from moodle's filesystem
+        // right after the file was transferred (uploaded) to opencast server.
+        // The plugin deletes all files in users draft area, which are related to
+        // uploaded video and removes the video file from trash also.
+        $name = 'adhocfiledeletion';
+        $title =   get_string('adhocfiledeletion', 'block_opencast');
+        $description =    get_string('adhocfiledeletiondesc', 'block_opencast');
+        $mform->addElement('selectyesno', $name, $title);
+        $mform->setDefault($name, 0);
+        $mform->addElement('static', 'description' . $name, '', $description);
+
         // Section overview settings.
         $mform->addElement('header', 'overview_header', get_string('overviewsettings', 'block_opencast'));
 
