@@ -21,7 +21,6 @@
  * @copyright  2017 Andreas Wagner, SYNERGY LEARNING
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-defined('MOODLE_INTERNAL') || die();
 
 $string['aclgroupdeleted'] = 'Access deleted for video: {$a->title}';
 $string['aclrolesadded'] = 'Not permanent acl roles added for video: {$a->title}
@@ -43,9 +42,6 @@ $string['adhocfiledeletiondesc'] = 'If activated the plugin tries to delete the 
     Please note that the file will still remain in the file system, if it is used within other places in moodle.';
 $string['addvideo'] = 'Add video';
 $string['addrole'] = 'Add new role';
-$string['apipasswordempty'] = 'Password for API user is not setup correctly, go to settings of block opencast to fix this';
-$string['apipasswordempty'] = 'Url for Opencast API is not setup correctly, go to settings of block opencast to fix this';
-$string['apiusernameempty'] = 'Username for Opencast API user is not setup correctly, go to settings of block opencast to fix this';
 $string['allowunassign'] = 'Allow unassign from course';
 $string['allowunassigndesc'] = 'Delete the assignment of a course series to control visibility in filepicker and course lists. This feature is only available,
     when it is possible to have events without series in opencast. Please ask the admistrator of the opencast system before activating this.';

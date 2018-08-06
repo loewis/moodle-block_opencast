@@ -138,7 +138,6 @@ class block_opencast_renderer extends plugin_renderer_base {
      * Render the opencast processing status.
      *
      * @param string $statuscode
-     *
      * @return string
      */
     public function render_status($statuscode) {
@@ -219,6 +218,14 @@ class block_opencast_renderer extends plugin_renderer_base {
         return \html_writer::link($url, $icon);
     }
 
+    /**
+     * Render the information about the video before deleting the assignment of the event
+     * to the course series.
+     *
+     * @param int $courseid
+     * @param object $video
+     * @return string
+     */
     public function render_video_info($courseid, $video) {
 
         if (!$video) {
