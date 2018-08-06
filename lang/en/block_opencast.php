@@ -158,6 +158,8 @@ $string['workflownotdefined'] = 'The workflow for updating metadata is not defin
 $string['worklowisrunning'] = 'A workflow is running. You cannot change the visibility at the moment.';
 $string['workflowrolesname'] = 'Workflow for changing the ACL rules';
 $string['workflowrolesdesc'] = 'This workflow is triggered when the nonpermanent ACL rules are deleted or added. If not set, it will not be possible to change the visibility of uploaded videos through the block.';
+$string['wrongmimetypedetected'] = 'An invalid mimetype was used while uploading the video {$a->filename} from course {$a->coursename}.
+    Only video files are allowed!';
 
 $string['privacy:metadata:block_opencast_uploadjob'] = 'Information about video uploads.';
 $string['privacy:metadata:block_opencast_uploadjob:fileid'] = 'ID of the file/video which is uploaded';
