@@ -184,11 +184,12 @@ if ($videodata->error == 0) {
             }
         }
 
-        if ($opencast->can_delete_acl_group_assignment($video)) {
-            $row[] = $renderer->render_delete_acl_group_assignment_icon($courseid, $video->identifier);
-        } else {
-            $row[] = "";
+        $actions = '';
+        if ($opencast->can_delete_acl_group_assignment($video, $courseid)) {
+            $actions .= $renderer->render_delete_acl_group_assignment_icon($courseid, $video->identifier);
         }
+
+        $row[] = $actions;
 
         $table->add_data($row);
     }

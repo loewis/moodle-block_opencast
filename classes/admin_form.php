@@ -93,6 +93,14 @@ class admin_form extends moodleform {
         $mform->setDefault($name, 0);
         $mform->addElement('static', 'description' . $name, '', $description);
 
+         // Allow unassign.
+        $name = 'allowunassign';
+        $title =   get_string('allowunassign', 'block_opencast');
+        $description =    get_string('allowunassigndesc', 'block_opencast');
+        $mform->addElement('advcheckbox', $name, $title);
+        $mform->setDefault($name, 0);
+        $mform->addElement('static', 'description' . $name, '', $description);
+
         // Configurate, whether a videofile should be deleted from moodle's filesystem
         // right after the file was transferred (uploaded) to opencast server.
         // The plugin deletes all files in users draft area, which are related to
