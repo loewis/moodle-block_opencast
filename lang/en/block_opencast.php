@@ -139,6 +139,8 @@ $string['uploadfilelimitdesc'] = 'Limit the file size of uploaded videos.';
 $string['uploadingeventfailed'] = 'Creating of event failed';
 $string['uploadjobssaved'] = 'Upload jobs saved.';
 $string['uploadqueuetoopencast'] = 'Videos ready to transfer to opencast';
+$string['uploadsucceededsubject'] = 'The upload of the video succeeded';
+$string['uploadsucceededbody'] = 'The upload of your video {$a} has finished sucessfully. You can now embed it in your course.';
 $string['uploadworkflow'] = 'Workflow to start after upload';
 $string['uploadworkflowdesc'] = 'Setup the unique shortname of the workflow, that should be started after succesfully uploading a video file to opencast.
     If left blank the standard workflow (ng-schedule-and-upload) will be used. Ask for additional workflows that may have been created by the opencast administrator.';
@@ -161,5 +163,7 @@ $string['privacy:metadata:block_opencast_uploadjob:timemodified'] = 'The date th
 $string['privacy:metadata:core_files'] = 'The opencast block stores files (videos) which have been uploaded by the user.';
 $string['privacy:metadata:opencast'] = 'The block interacts with an opencast instance and thus data needs to be exchanged.';
 $string['privacy:metadata:opencast:file'] = 'The file which is selected is uploaded to opencast.';
+
+$string['messageprovider:upload_succeeded'] = 'Message after successful completed video upload.';
 
 $string['workflow_not_existing'] = 'This workflow does not exist.';

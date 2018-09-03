@@ -37,6 +37,7 @@ class upload_helper {
     const STATUS_CREATING_EVENT = 25;
     const STATUS_UPLOADED = 27;
     const STATUS_TRANSFERRED = 40;
+    const STATUS_PROCESSING_COMPLETE = 60;
 
     private $apibridge;
 
@@ -198,6 +199,25 @@ class upload_helper {
 
         // Delete file from files table.
         $file->delete();
+    }
+
+    protected function processing_complete($job) {
+        // send out notification email to submitter
+        global $PAGE;
+        $PAGE->set_context(\context_course::instance($job->courseid));
+        $eventdata = new \core\message\message();
+        $eventdata->courseid          = $job->courseid;
+        $eventdata->component         = 'block_opencast';
+        $eventdata->name              = 'upload_succeeded';
+        $eventdata->userfrom          = core_user::get_noreply_user();
+        $eventdata->userto            = $job->userid;
+        $eventdata->subject           = get_string('uploadsucceededsubject', 'block_opencast');
+        $eventdata->fullmessage       = get_string('uploadsucceededbody', 'block_opencast', $filename);
+        $eventdata->fullmessageformat = FORMAT_PLAIN;
+        $eventdata->fullmessagehtml   = '';
+        $eventdata->smallmessage      = '';
+        $eventdata->notification      = 1;
+        message_send($eventdata);
     }
 
     protected function upload_failed($job, $errormessage) {
