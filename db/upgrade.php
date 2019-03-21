@@ -89,36 +89,7 @@ function xmldb_block_opencast_upgrade($oldversion) {
         upgrade_block_savepoint(true, 2018012501, 'opencast');
     }
 
-    if ($oldversion < 2018082800) {
-
-        // Define table block_opencast_series to be created.
-        $table = new xmldb_table('block_opencast_series');
-
-        // Conditionally launch create table for block_opencast_series.
-        if ($dbman->table_exists($table)) {
-            $dbman->drop_table($table);
-        }
-
-        // Opencast savepoint reached.
-        upgrade_block_savepoint(true, 2018082800, 'opencast');
-    }
-
-    if ($oldversion < 2018082801) {
-
-        // Define field permanent to be added to block_opencast_roles.
-        $table = new xmldb_table('block_opencast_roles');
-        $field = new xmldb_field('permanent', XMLDB_TYPE_INTEGER, 1, true, XMLDB_NOTNULL, null, 1, 'actions');
-
-        // Conditionally launch add field permanent.
-        if (!$dbman->field_exists($table, $field)) {
-            $dbman->add_field($table, $field);
-        }
-
-        // Opencast savepoint reached.
-        upgrade_block_savepoint(true, 2018082801, 'opencast');
-    }
-
-    if ($oldversion < 2018082802) {
+    if ($oldversion < 2018080300) {
 
         // Define table block_opencast_draftitemid to be created.
         $table = new xmldb_table('block_opencast_draftitemid');
@@ -141,10 +112,27 @@ function xmldb_block_opencast_upgrade($oldversion) {
         }
 
         // Opencast savepoint reached.
-        upgrade_block_savepoint(true, 2018082802, 'opencast');
+        upgrade_block_savepoint(true, 2018080300, 'opencast');
     }
 
-    if ($oldversion < 2018082803) {
+    if ($oldversion < 2018082800) {
+
+        // Define table block_opencast_series to be created.
+        $table = new xmldb_table('block_opencast_series');
+
+        // Conditionally launch create table for block_opencast_series.
+        if ($dbman->table_exists($table)) {
+            $dbman->drop_table($table);
+        }
+
+        // Define field permanent to be added to block_opencast_roles.
+        $table = new xmldb_table('block_opencast_roles');
+        $field = new xmldb_field('permanent', XMLDB_TYPE_INTEGER, 1, true, XMLDB_NOTNULL, null, 1, 'actions');
+
+        // Conditionally launch add field permanent.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
 
         // Define table block_opencast_deletejob to be created.
         $table = new xmldb_table('block_opencast_deletejob');
@@ -165,10 +153,10 @@ function xmldb_block_opencast_upgrade($oldversion) {
         }
 
         // Opencast savepoint reached.
-        upgrade_block_savepoint(true, 2018082803, 'opencast');
+        upgrade_block_savepoint(true, 2018082800, 'opencast');
     }
 
-    if ($oldversion < 2018082804) {
+    if ($oldversion < 2018082802) {
 
         // Define table block_opencast_groupaccess to be created.
         $table = new xmldb_table('block_opencast_groupaccess');
@@ -189,7 +177,7 @@ function xmldb_block_opencast_upgrade($oldversion) {
         }
 
         // Opencast savepoint reached.
-        upgrade_block_savepoint(true, 2018082804, 'opencast');
+        upgrade_block_savepoint(true, 2018082802, 'opencast');
     }
 
     return true;
