@@ -142,6 +142,9 @@ if (has_capability('block/opencast:defineseriesforcourse', $coursecontext)) {
     $editseriesbutton = $OUTPUT->single_button($editseriesurl, get_string('editseriesforcourse', 'block_opencast'));
     echo html_writer::div($editseriesbutton);
 }
+else if ($apibridge->get_stored_seriesid($courseid)) {
+    echo html_writer::div(get_string('seriesid', 'block_opencast') . ": " . $apibridge->get_stored_seriesid($courseid));
+}
 
 if (!$apibridge->get_stored_seriesid($courseid) &&
     has_capability('block/opencast:createseriesforcourse', $coursecontext)
