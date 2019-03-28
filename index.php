@@ -125,6 +125,10 @@ if ($seriesid && !$ocseriesid) {
     }
 }
 
+// Beuth specific
+echo html_writer::div("Beim HRZ der Beuth Hochschule finden Sie <a href='https://doku.beuth-hochschule.de/moodle/manual_lk#videos_in_moodlekursen_einbinden'>Dokumentation zum Einbinden von Videos in Moodle</a>. Bitte beachten Sie unbedingt die <a href='https://doku.beuth-hochschule.de/opencast/datenschutz'>Vorgaben und Empfehlungen zum Datenschutz</a>.");
+// end Beuth specific
+
 if (has_capability('block/opencast:addvideo', $coursecontext)) {
 
     echo $OUTPUT->heading(get_string('uploadqueuetoopencast', 'block_opencast'));
