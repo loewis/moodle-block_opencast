@@ -145,6 +145,7 @@ This saves storage and processing power, but it might cause problems, when you u
 $string['rolename'] = 'Role name';
 $string['seriescreated'] = 'Series was created.';
 $string['seriesnotcreated'] = 'Series could not be was created.';
+$string['seriesid'] = 'Opencast series ID';
 $string['seriesidsaved'] = 'The series ID was saved.';
 $string['seriesidunset'] = 'The series ID was removed.';
 $string['seriesidnotvalid'] = 'The series does not exist.';
