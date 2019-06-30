@@ -54,22 +54,29 @@ require_capability('block/opencast:addvideo', $coursecontext);
 $data = new stdClass();
 $options = array('subdirs' => 0,
                  'maxfiles' => -1,
-                 'accepted_types' => 'video',
+                 'accepted_types' => 'video', //TODO
                  'return_types' => FILE_INTERNAL);
-$data = file_prepare_standard_filemanager($data, 'videos', $options, $coursecontext, 'block_opencast', upload_helper::OC_FILEAREA, 0);
 
 // Record the user draft area in this context.
-\block_opencast\local\file_deletionmanager::track_draftitemid($coursecontext->id, $data->videos_filemanager);
+//XXX obsolete \block_opencast\local\file_deletionmanager::track_draftitemid($coursecontext->id, $data->videos_filemanager);
 
-$addvideoform = new \block_opencast\local\addvideo_form(null, array('data' => $data, 'courseid' => $courseid));
-
-if ($addvideoform->is_cancelled()) {
-    redirect($redirecturl);
-}
-
-if ($data = $addvideoform->get_data()) {
-    file_save_draft_area_files($data->videos_filemanager,
-        $coursecontext->id, 'block_opencast', upload_helper::OC_FILEAREA, 0, $options);
+if (isset($_FILES['uploaded'])) {
+    $name = $_FILES['uploaded']['name'];
+    $type = $_FILES['uploaded']['type'];
+    $tmp_name = $_FILES['uploaded']['tmp_name'];
+    $error = $_FILES['uploaded']['error'];
+    if (!$error) {
+        $fs = get_file_storage();
+        $filerecord = [
+            'component' => 'block_opencast',
+            'filearea' => upload_helper::OC_FILEAREA,
+            'contextid' => $coursecontext->id,
+            'filename' => $name,
+            'itemid' => 0,
+            'filepath' => '/'
+            ];
+        $fs->create_file_from_pathname($filerecord, $tmp_name);
+    }
     // Update all upload jobs.
     \block_opencast\local\upload_helper::save_upload_jobs($courseid, $coursecontext);
     redirect($redirecturl, get_string('uploadjobssaved', 'block_opencast'));
@@ -79,5 +86,10 @@ $renderer = $PAGE->get_renderer('block_opencast');
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('edituploadjobs', 'block_opencast'));
-$addvideoform->display();
+echo "<form method='POST' enctype='multipart/form-data'>";
+echo "<input type='hidden' name='MAX_FILE_SIZE' value='1000000'/>";
+echo "<input type='hidden' name='courseid' value='${courseid}'/>";
+echo "<input name='uploaded' type='file'/>";
+echo "<input type='submit'>";
+echo "</form>";
 echo $OUTPUT->footer();
