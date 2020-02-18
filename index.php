@@ -107,6 +107,7 @@ $opencast = \block_opencast\local\apibridge::get_instance();
 $sortcolumns = $table->get_sort_columns();
 $videodata = $opencast->get_course_videos($courseid, $sortcolumns);
 
+/** @var block_opencast_renderer $renderer */
 $renderer = $PAGE->get_renderer('block_opencast');
 
 echo $OUTPUT->header();
@@ -129,6 +130,10 @@ if ($seriesid && !$ocseriesid) {
 echo html_writer::div("Beim HRZ der Beuth Hochschule finden Sie <a href='https://doku.beuth-hochschule.de/moodle/manual_lk#videos_in_moodlekursen_einbinden'>Dokumentation zum Einbinden von Videos in Moodle</a>. Bitte beachten Sie unbedingt die <a href='https://doku.beuth-hochschule.de/opencast/datenschutz'>Vorgaben und Empfehlungen zum Datenschutz</a>.");
 // end Beuth specific
 
+echo $renderer->render_series_settings_actions($courseid,
+    !$apibridge->get_stored_seriesid($courseid) && has_capability('block/opencast:createseriesforcourse', $coursecontext),
+    has_capability('block/opencast:defineseriesforcourse', $coursecontext));
+
 if (has_capability('block/opencast:addvideo', $coursecontext)) {
 
     echo $OUTPUT->heading(get_string('uploadqueuetoopencast', 'block_opencast'));
@@ -137,26 +142,8 @@ if (has_capability('block/opencast:addvideo', $coursecontext)) {
     echo $renderer->render_upload_jobs($videojobs);
 
     $addvideourl = new moodle_url('/blocks/opencast/addvideo.php', array('courseid' => $courseid));
-    $addvideobutton = $OUTPUT->single_button($addvideourl, get_string('edituploadjobs', 'block_opencast'));
+    $addvideobutton = $OUTPUT->single_button($addvideourl, get_string('addvideo', 'block_opencast'));
     echo html_writer::div($addvideobutton);
-}
-
-if (has_capability('block/opencast:defineseriesforcourse', $coursecontext)) {
-    $editseriesurl = new moodle_url('/blocks/opencast/editseries.php', array('courseid' => $courseid));
-    $editseriesbutton = $OUTPUT->single_button($editseriesurl, get_string('editseriesforcourse', 'block_opencast'));
-    echo html_writer::div($editseriesbutton);
-}
-else if ($apibridge->get_stored_seriesid($courseid)) {
-    echo html_writer::div(get_string('seriesid', 'block_opencast') . ": " . $apibridge->get_stored_seriesid($courseid));
-}
-
-if (!$apibridge->get_stored_seriesid($courseid) &&
-    has_capability('block/opencast:createseriesforcourse', $coursecontext)
-) {
-
-    $createseriesurl = new moodle_url('/blocks/opencast/createseries.php', array('courseid' => $courseid));
-    $createseriesbutton = $OUTPUT->single_button($createseriesurl, get_string('createseriesforcourse', 'block_opencast'));
-    echo html_writer::div($createseriesbutton);
 }
 
 echo $OUTPUT->heading(get_string('videosavailable', 'block_opencast'));
@@ -207,6 +194,10 @@ if ($videodata->error == 0) {
                 $actions .= $renderer->render_delete_acl_group_assignment_icon($courseid, $video->identifier);
             }
 
+            // in order to add metadata config
+            if ($opencast->can_update_event_metadata($video, $courseid)) {
+                $actions .= $renderer->render_update_metadata_event_icon($courseid, $video->identifier);
+            }
 
             if ($opencast->can_delete_event_assignment($video, $courseid)) {
                 $actions .= $renderer->render_delete_event_icon($courseid, $video->identifier);
