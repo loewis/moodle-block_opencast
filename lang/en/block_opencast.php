@@ -260,6 +260,7 @@ $string['publisher'] = 'Publisher';
 $string['identifier'] = 'Identifier';
 $string['updatemetadatasaved'] = 'Metadata is saved.';
 $string['updatemetadata'] = 'Update metadata for this event';
+$string['linktosection'] = 'Link this event into a course section';
 $string['presenter'] = 'Presenter';
 $string['presenterdesc'] = 'A video of a person speaking to an audience.';
 $string['presentation'] = 'Presentation';

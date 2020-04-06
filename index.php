@@ -202,6 +202,8 @@ if ($videodata->error == 0) {
                 $actions .= $renderer->render_update_metadata_event_icon($courseid, $video->identifier);
             }
 
+            $actions .= $renderer->render_link_to_section_event_icon($courseid, $video->identifier);
+
             if ($opencast->can_delete_event_assignment($video, $courseid)) {
                 $actions .= $renderer->render_delete_event_icon($courseid, $video->identifier);
             }

@@ -337,6 +337,22 @@ class block_opencast_renderer extends plugin_renderer_base {
         return \html_writer::link($url, $icon);
     }
 
+    //linktosection
+    /**
+     * Render the link to link video into a section.
+     *
+     * @param string $videoidentifier
+     */
+    public function render_link_to_section_event_icon($courseid, $videoidentifier) {
+
+        $url = new \moodle_url('/blocks/opencast/linktosection.php', array('video_identifier' => $videoidentifier, 'courseid' => $courseid));
+        $text = get_string('linktosection', 'block_opencast');
+
+        $icon = $this->output->pix_icon('t/switch_plus', $text);
+
+        return \html_writer::link($url, $icon);
+    }
+
     /**
      * Render the information about the video before finally delete it.
      *
