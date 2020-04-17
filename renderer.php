@@ -303,7 +303,7 @@ class block_opencast_renderer extends plugin_renderer_base {
 
         $row[] = $this->render_created($video->start);
         $row[] = $video->title;
-        $row[] = $this->render_publication_status($video->publication_status);
+        $row[] = $this->render_publication_status($video->identifier, $video->publication_status);
         $row[] = $this->render_processing_state_icon($video->processing_state);
 
         $table->data[] = $row;
@@ -382,7 +382,7 @@ class block_opencast_renderer extends plugin_renderer_base {
         $row[] = $this->render_created($video->start);
         $row[] = $video->title;
         if (get_config('block_opencast', 'showpublicationchannels')) {
-            $row[] = $this->render_publication_status($video->publication_status);
+            $row[] = $this->render_publication_status($video->identifier, $video->publication_status);
         }
         $row[] = $this->render_processing_state_icon($video->processing_state);
 
