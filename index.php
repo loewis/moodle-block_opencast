@@ -128,6 +128,9 @@ if ($seriesid && !$ocseriesid) {
 
 // Beuth specific
 echo html_writer::div("Beim HRZ der Beuth Hochschule finden Sie <a href='https://doku.beuth-hochschule.de/moodle/manual_lk#videos_in_moodlekursen_einbinden'>Dokumentation zum Einbinden von Videos in Moodle</a>. Bitte beachten Sie unbedingt die <a href='https://doku.beuth-hochschule.de/opencast/datenschutz'>Vorgaben und Empfehlungen zum Datenschutz</a>.");
+if ($seriesid) {
+    echo html_writer::div(get_string('seriesid', 'block_opencast') . ": " . $seriesid);
+}
 // end Beuth specific
 
 echo $renderer->render_series_settings_actions($courseid,
