@@ -44,6 +44,25 @@ $string['actions'] = 'Comma-separated list of actions';
 $string['adhocfiledeletion'] = 'Delete videofile from moodle';
 $string['adhocfiledeletiondesc'] = 'If activated the plugin tries to delete the videofile from moodle\'s filessystem right after it was uploaded to opencast server.
     Please note that the file will still remain in the file system, if it is used within other places in moodle.';
+$string['addlti_modulecreated'] = 'The \'{$a}\' series module has been added to this course.';
+$string['addlti_moduleexists'] = 'There is already an Opencast series module added to this course. There is no need to add another one.';
+$string['addlti_modulenotcreated'] = 'The \'{$a}\' series module could not be created. Please try again or contact your Moodle administrator.';
+$string['addlti_addbuttonexplanation'] = 'The videos which are added to and are available in this course are not provided to your students automatically.<br />Here, you can add an Opencast series module to your course which provides all available videos as an Opencast series list to your students.';
+$string['addlti_addbuttontitle'] = 'Add Opencast series module to course';
+$string['addlti_defaulttitle'] = 'Opencast videos';
+$string['addlti_formltititle'] = 'Opencast series module title';
+$string['addlti_header'] = 'Provide videos';
+$string['addlti_noemptytitle'] = 'You have to set a title for the Opencast series module or to use the default title ("{$a}")';
+$string['addlti_settingdefaulttitle'] = 'Default LTI module title';
+$string['addlti_settingdefaulttitle_desc'] = 'The default title to be used when a new Opencast LTI module is added to a course.';
+$string['addlti_settingenabled'] = 'Enable ”Add LTI module"';
+$string['addlti_settingenabled_desc'] = 'If enabled, teachers can add an Opencast LTI module to a course. This LTI module will be pointing to the course\'s Opencast series.';
+$string['addlti_settingheader'] = 'Add Opencast LTI module to courses';
+$string['addlti_settingpreconfiguredtool'] = 'Preconfigured LTI tool';
+$string['addlti_settingpreconfiguredtool_desc'] = 'The preconfigured LTI tool to be used when a new Opencast LTI module is added to a course.';
+$string['addlti_settingpreconfiguredtool_notools'] = 'No preconfigured LTI tools to be used found. Please create an Opencast LTI tool first on the {$a} admin setting page.';
+$string['addlti_viewbuttonexplanation'] = 'An Opencast series module to provide the videos available in this course has been added to the course before.';
+$string['addlti_viewbuttontitle'] = 'View Opencast series module in course';
 $string['addvideo'] = 'Add video';
 $string['addrole'] = 'Add new role';
 $string['adminchoice_noworkflow'] = "-- No workflow-- ";
@@ -156,6 +175,7 @@ $string['nothingtodisplay'] = 'No videos available';
 $string['notpublished'] = 'Not published';
 $string['novideosavailable'] = 'No videos available';
 $string['opencast:addinstance'] = 'Add a new opencast upload block';
+$string['opencast:addlti'] = 'Add Opencast series module to course';
 $string['opencast:addvideo'] = 'Add a new video to opencast upload block';
 $string['opencast:createseriesforcourse'] = 'Create a new series in opencast for a moodle course';
 $string['opencast:deleteevent'] = 'Finally delete a video (event) in opencast';
@@ -275,11 +295,11 @@ $string['heading_required'] = 'Required';
 $string['heading_readonly'] = 'Read Only';
 $string['heading_params'] = 'Parameters (JSON)';
 $string['catalogparam'] = 'Parameters in JSON-Format';
-$string['catalogparam_help'] = '<b>JSON format:</b> {"param1":"value1", "param2":"value2"}<br>'
-                                . '<b>String (text), Long Text (textarea):</b> Parameters will be defined as attributes of the element. i.e. {"style":"min-width: 27ch;"} which defines the element´s style attribute <br>'
-                                . '<b>Drop Down (select):</b> Parameters will be defined as options of the select element. i.e. {"en": "English", "de": "German"} which takes the left side as value and right side as text to show<br>'
-                                . '<b>Arrays (autocomplete):</b> Parameters will be defined as <a target="_blank" href="https://docs.moodle.org/dev/lib/formslib.php_Form_Definition#autocomplete">suggestions</a>. i.e. {"1": "Dr. Doe", "2": "Johnson"} which shows (Dr. Doe and Johnson) as suggestions<br>'
-                                . '<b>Date Time Selector (datetime):</b> Parameters will be defined as <a target="_blank" href="https://docs.moodle.org/dev/lib/formslib.php_Form_Definition#date_selector">date_selector variables</a> . i.e. {"startyear": "1990", "stopyear": "2020"} which defines date range to be selected between 1990 - 2020';
+$string['catalogparam_help'] = '<b>JSON format:</b> {"param1":"value1", "param2":"value2"}<br>
+                                <b>String (text), Long Text (textarea):</b> Parameters will be defined as attributes of the element. i.e. {"style":"min-width: 27ch;"} which defines the element´s style attribute <br>
+                                <b>Drop Down (select):</b> Parameters will be defined as options of the select element. i.e. {"en": "English", "de": "German"} which takes the left side as value and right side as text to show<br>
+                                <b>Arrays (autocomplete):</b> Parameters will be defined as <a target="_blank" href="https://docs.moodle.org/dev/lib/formslib.php_Form_Definition#autocomplete">suggestions</a>. i.e. {"1": "Dr. Doe", "2": "Johnson"} which shows (Dr. Doe and Johnson) as suggestions<br>
+                                <b>Date Time Selector (datetime):</b> Parameters will be defined as <a target="_blank" href="https://docs.moodle.org/dev/lib/formslib.php_Form_Definition#date_selector">date_selector variables</a> . i.e. {"startyear": "1990", "stopyear": "2020"} which defines date range to be selected between 1990 - 2020';
 $string['addcatalog'] = 'Add new metadata';
 $string['descriptionmdfn'] = 'This is the actual field name passing as metadata (id); the presented name according to this field name should be set in language string.';
 $string['descriptionmdpj'] = 'The value should be JSON string format and it is used to define parameters for the field!';
@@ -305,3 +325,4 @@ $string['lticonsumerkey'] = 'Consumer key';
 $string['lticonsumerkey_desc'] = 'LTI Consumer key for the opencast studio integration.';
 $string['lticonsumersecret'] = 'Consumer secret';
 $string['lticonsumersecret_desc'] = 'LTI Consumer secret for the opencast studio integration.';
+$string['opencaststudiointegration'] = 'Opencast studio integration';
