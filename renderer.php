@@ -90,8 +90,8 @@ class block_opencast_renderer extends plugin_renderer_base {
 
         if (has_capability('block/opencast:addvideo', $coursecontext)) {
             $addvideourl = new moodle_url('/blocks/opencast/addvideo.php', array('courseid' => $courseid));
-            $addvideobutton = $this->output->single_button($addvideourl, get_string('addvideo', 'block_opencast'));
-            $html .= html_writer::div($addvideobutton, 'opencast-addvideo-wrap');
+            $addvideobutton = $this->output->single_button($addvideourl, get_string('addvideo', 'block_opencast'), 'get');
+            $html .= html_writer::div($addvideobutton, 'opencast-addvideo-wrap overview');
 
             if (get_config('block_opencast', 'enable_opencast_studio_link')) {
                 $recordvideo = new moodle_url('/blocks/opencast/recordvideo.php', array('courseid' => $courseid));
@@ -169,33 +169,44 @@ class block_opencast_renderer extends plugin_renderer_base {
      * Render the opencast processing status.
      *
      * @param string $statuscode
+     * @param int $countfailed
      *
      * @return string
      */
-    public function render_status($statuscode) {
-        return \block_opencast\local\upload_helper::get_status_string($statuscode);
+    public function render_status($statuscode, $countfailed = 0) {
+        // Get understandable status string.
+        $status_string = \block_opencast\local\upload_helper::get_status_string($statuscode);
+
+        // If needed, add the number of failed uploads.
+        if ($countfailed > 1) {
+            $status_string .= '<br />'.get_string('failedtransferattempts', 'block_opencast', $countfailed);
+        }
+
+        // Return string.
+        return $status_string;
     }
 
     /**
      * Render the tabel of upload jobs.
      *
-     * @param  array uploadjobs array of uploadjob objects
+     * @param array uploadjobs array of uploadjob objects
+     * @param bool showdeletebutton shows a delete button in the last column
      *
      * @return string
      */
-    public function render_upload_jobs($uploadjobs) {
+    public function render_upload_jobs($uploadjobs, $showdeletebutton = true) {
 
         $table = new html_table();
         $table->head = array(
-            get_string('date'),
+            get_string('hstart_date', 'block_opencast'),
             get_string('title', 'block_opencast'),
-            get_string('presenterfilename', 'block_opencast'),
-            get_string('presenterfilesize', 'block_opencast'),
-            get_string('presentationfilename', 'block_opencast'),
-            get_string('presentationfilesize', 'block_opencast'),
+            get_string('presenterfile', 'block_opencast'),
+            get_string('presentationfile', 'block_opencast'),
             get_string('status'),
-            get_string('countfailed', 'block_opencast'),
             get_string('createdby', 'block_opencast'));
+        if($showdeletebutton) {
+            $table->head[] = '';
+        }
 
         foreach ($uploadjobs as $uploadjob) {
 
@@ -213,13 +224,47 @@ class block_opencast_renderer extends plugin_renderer_base {
             $row = [];
             $row[] = userdate($uploadjob->timecreated, get_string('strftimedatetime', 'langconfig'));
             $row[] = $title;
-            $row[] = $uploadjob->presenter_filename;
-            $row[] = $uploadjob->presenter_filesize ? display_size($uploadjob->presenter_filesize) : "";
-            $row[] = $uploadjob->presentation_filename;
-            $row[] = $uploadjob->presentation_filesize ? display_size($uploadjob->presentation_filesize) : "";
-            $row[] = $this->render_status($uploadjob->status);
-            $row[] = $uploadjob->countfailed;
+            if ($uploadjob->presenter_filename) {
+                if ($uploadjob->presenter_filesize) {
+                    $row[] = $uploadjob->presenter_filename.' ('.display_size($uploadjob->presenter_filesize).')';
+                } else {
+                    $row[] = $uploadjob->presenter_filename;
+                }
+            } else if (property_exists($uploadjob, 'presenter_chunkupload_filename')) {
+                if ($uploadjob->presenter_chunkupload_filesize) {
+                    $row[] = $uploadjob->presenter_chunkupload_filename.
+                        ' ('.display_size($uploadjob->presenter_chunkupload_filesize).')';
+                } else {
+                    $row[] = $uploadjob->presenter_chunkupload_filename;
+                }
+            } else {
+                $row[] = '&mdash;';
+            }
+            if ($uploadjob->presentation_filename) {
+                if ($uploadjob->presentation_filesize) {
+                    $row[] = $uploadjob->presentation_filename.' ('.display_size($uploadjob->presentation_filesize).')';
+                } else {
+                    $row[] = $uploadjob->presentation_filename;
+                }
+            } else if (property_exists($uploadjob, 'presentation_chunkupload_filename')) {
+                if ($uploadjob->presentation_chunkupload_filesize) {
+                    $row[] = $uploadjob->presentation_chunkupload_filename.
+                        ' ('.display_size($uploadjob->presentation_chunkupload_filesize).')';
+                } else {
+                    $row[] = $uploadjob->presentation_chunkupload_filename;
+                }
+            } else {
+                $row[] = '&mdash;';
+            }
+            $row[] = $this->render_status($uploadjob->status, $uploadjob->countfailed);
             $row[] = fullname($uploadjob);
+            if($showdeletebutton) {
+                $coursecontext = context_course::instance($uploadjob->courseid);
+                // the one who is allowed to add the video is also allowed to delete the video before it is uploaded
+                $row[] = ($uploadjob->status == \block_opencast\local\upload_helper::STATUS_READY_TO_UPLOAD &&
+                    has_capability('block/opencast:addvideo', $coursecontext)) ?
+                    $this->render_delete_draft_icon($uploadjob->courseid, $uploadjob->id) : '';
+            }
 
             $table->data[] = $row;
         }
@@ -331,6 +376,26 @@ class block_opencast_renderer extends plugin_renderer_base {
 
         $url = new \moodle_url('/blocks/opencast/deleteevent.php', array('identifier' => $videoidentifier, 'courseid' => $courseid));
         $text = get_string('deleteevent', 'block_opencast');
+
+        $icon = $this->output->pix_icon('t/delete', $text);
+
+        return \html_writer::link($url, $icon);
+    }
+
+
+    /**
+     * Render the link to delete a draft file.
+     *
+     * @param int    $courseid
+     * @param string $videoidentifier
+     * @return string
+     * @throws coding_exception
+     * @throws moodle_exception
+     */
+    private function render_delete_draft_icon($courseid, $videoidentifier) {
+
+        $url = new \moodle_url('/blocks/opencast/deletedraft.php', array('identifier' => $videoidentifier, 'courseid' => $courseid));
+        $text = get_string('dodeleteevent', 'block_opencast');
 
         $icon = $this->output->pix_icon('t/delete', $text);
 
