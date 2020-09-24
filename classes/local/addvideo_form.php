@@ -33,7 +33,6 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 
 require_once($CFG->dirroot . '/lib/formslib.php');
-require_once($CFG->dirroot . "/blocks/opencast/form/filepicker_opencast.php");
 
 class addvideo_form extends \moodleform {
 

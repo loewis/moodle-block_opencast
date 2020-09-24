@@ -39,7 +39,6 @@ if (has_capability('moodle/site:config', context_system::instance())) {
 
     $settingsfields = [
         'limituploadjobs',
-        'uploadfilelimit',
         'uploadworkflow',
         'publishtoengage',
         'reuseexistingupload',
